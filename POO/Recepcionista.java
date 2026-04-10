@@ -1,62 +1,28 @@
-package com.fatec.ads;
+package com.example.demo; 
+import java.util.List;
+import java.util.ArrayList;
 
-public class Recepcionista {
-    String nome;
-    String cpf;
-    String telefone;
-    String senha;
+public class Agenda {
+    private String data;
+    private String hora;
+    // Agregação de Consultas conforme o diagrama
+    private List<Consulta> consultas = new ArrayList<>();
 
-    public void acessar(){}
+    public void consultar(){}
 
-    public String getNome() {
-        return nome;
+    public String getData() { return data; }
+    public void setData(String data) throws ExceptionClinica {
+        if(data==null) throw new ExceptionClinica("AS2345234", "A data nao pode ser nula!");
+        this.data = data;
     }
 
-    public void setNome(String nome) {
-        this.nome = nome;
+    public void adicionarConsulta(Consulta c) {
+        this.consultas.add(c);
     }
 
-    public String getCpf() {
-        return cpf;
+    public Agenda(String data, String hora) {
+        this.data = data;
+        this.hora = hora;
     }
-
-    public void setCpf(String cpf) {
-        this.cpf = cpf;
-    }
-
-    public String getTelefone() {
-        return telefone;
-    }
-
-    public void setTelefone(String telefone) {
-        this.telefone = telefone;
-    }
-
-    public String getSenha() {
-        return senha;
-    }
-
-    public void setSenha(String senha) {
-        this.senha = senha;
-    }
-
-    public Recepcionista(String nome, String cpf, String telefone, String senha) {
-        this.nome = nome;
-        this.cpf = cpf;
-        this.telefone = telefone;
-        this.senha = senha;
-    }
-
-    public Recepcionista() {
-    }
-
-   
-    public void mostrar() {
-        var s = "Recepcionista [getNome()=" + getNome() + ", getCpf()=" + getCpf() + ", getTelefone()=" + getTelefone()
-                + ", getSenha()=" + getSenha() + ", getClass()=" + getClass() + ", hashCode()=" + hashCode()
-                + ", toString()=" + super.toString() + "]";
-        System.out.println(s);
-    };
-
-    
+    public Agenda() {}
 }
