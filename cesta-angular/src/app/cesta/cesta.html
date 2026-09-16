@@ -1,0 +1,93 @@
+<main class="cesta-page">
+  <section class="cesta-cabecalho">
+    <div>
+      <span class="eyebrow">SEU PEDIDO</span>
+      <h1>Minha cesta</h1>
+      <p>Confira os produtos escolhidos antes de finalizar a compra.</p>
+    </div>
+
+    <span class="contador" *ngIf="lista.length > 0">
+      {{ lista.length }} {{ lista.length === 1 ? 'item' : 'itens' }}
+    </span>
+  </section>
+
+  <div class="alerta-vazio" *ngIf="lista.length <= 0">
+    <div class="icone-vazio">🛒</div>
+    <h2>Sua cesta está vazia</h2>
+    <p>Adicione produtos da vitrine para continuar sua compra.</p>
+    <a href="vitrine" class="btn btn-dark">Ver produtos</a>
+  </div>
+
+  <div class="row g-4" *ngIf="lista.length > 0">
+    <div class="col-12 col-lg-8">
+      <div class="lista-produtos">
+        <article class="produto-card" *ngFor="let obj of lista">
+          <div class="produto-icone" aria-hidden="true">🛠️</div>
+
+          <div class="produto-info">
+            <span class="codigo">CÓD. {{ obj.codigo }}</span>
+            <h2>{{ obj.nome }}</h2>
+            <p>{{ formatarMoeda(obj.valorUnitario) }} por unidade</p>
+
+            <button
+              type="button"
+              class="btn-remover"
+              (click)="removerItem(obj.codigo)"
+            >
+              Remover
+            </button>
+          </div>
+
+          <div class="produto-controles">
+            <span class="rotulo">Quantidade</span>
+            <div class="seletor-quantidade">
+              <button
+                type="button"
+                (click)="diminuirQuantidade(obj)"
+                [disabled]="obj.quantidade <= 1"
+                aria-label="Diminuir quantidade"
+              >
+                −
+              </button>
+              <strong>{{ obj.quantidade }}</strong>
+              <button
+                type="button"
+                (click)="aumentarQuantidade(obj)"
+                aria-label="Aumentar quantidade"
+              >
+                +
+              </button>
+            </div>
+            <span class="subtotal">{{ formatarMoeda(subtotal(obj)) }}</span>
+          </div>
+        </article>
+      </div>
+    </div>
+
+    <div class="col-12 col-lg-4">
+      <aside class="resumo-card">
+        <span class="eyebrow">RESUMO</span>
+        <h2>Resumo do pedido</h2>
+
+        <div class="linha-resumo">
+          <span>Subtotal</span>
+          <strong>{{ formatarMoeda(totalGeral()) }}</strong>
+        </div>
+        <div class="linha-resumo frete">
+          <span>Frete</span>
+          <strong>A calcular</strong>
+        </div>
+
+        <div class="linha-total">
+          <span>Total</span>
+          <strong>{{ formatarMoeda(totalGeral()) }}</strong>
+        </div>
+
+        <button type="button" class="btn-finalizar">Finalizar pedido</button>
+        <a href="vitrine" class="continuar-comprando">Continuar comprando</a>
+
+        <p class="compra-segura">🔒 Ambiente seguro para sua compra</p>
+      </aside>
+    </div>
+  </div>
+</main>
