@@ -1,0 +1,32 @@
+<article class="product-card" [attr.data-category]="product.category">
+  <a
+    class="product-image"
+    [routerLink]="['/produto', product.id]"
+    [attr.aria-label]="'Ver ' + product.name"
+    ><img
+      [src]="'images/produto-' + ('0' + product.id).slice(-2) + '.png'"
+      [alt]="product.name"
+      loading="lazy"
+      width="280"
+      height="280"
+    /><span class="product-tag">{{ product.category }}</span></a
+  >
+  <div class="product-info">
+    <span class="eyebrow brand">{{ product.brand }}</span>
+    <h3>
+      <a [routerLink]="['/produto', product.id]">{{ product.name }}</a>
+    </h3>
+    <div class="product-bottom">
+      <div>
+        <strong>{{ product.price / 100 | currency: 'BRL' }}</strong>
+      </div>
+      <button
+        class="add-button"
+        (click)="loja.adicionar(product.id)"
+        [attr.aria-label]="'Adicionar ' + product.name + ' à cesta'"
+      >
+        <r-icon name="bag" />
+      </button>
+    </div>
+  </div>
+</article>

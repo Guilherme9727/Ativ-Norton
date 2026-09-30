@@ -1,0 +1,68 @@
+@if (isHome && !q && !category) {
+  <section class="container hero-wrap">
+    <div class="hero">
+      <div>
+        <h1>Ideias começam no papel.</h1>
+        <p>Materiais para estudar, escrever e organizar o dia a dia.</p>
+        <button class="btn btn-primary" (click)="catalog.scrollIntoView()">Ver produtos</button>
+      </div>
+      <img
+        src="images/produto-05.png"
+        alt="Conjunto de cinco marca-textos BIC"
+        width="240"
+        height="240"
+      />
+    </div>
+  </section>
+}
+<section class="container catalog-section" id="catalogo" #catalog>
+  <div class="section-heading">
+    <div>
+      <h2>
+        {{ q ? 'Resultados para “' + q + '”' : category || 'Nossos produtos' }}
+      </h2>
+    </div>
+    <span class="result-count"
+      >{{ filtered.length }} {{ filtered.length === 1 ? 'produto' : 'produtos' }}</span
+    >
+  </div>
+  <div class="catalog-controls">
+    <div class="category-tabs" aria-label="Filtrar produtos">
+      <button (click)="select('')" [class.active]="!category" [attr.aria-pressed]="!category">
+        Todos
+      </button>
+      @for (cat of loja.categorias; track cat) {
+        <button
+          (click)="select(cat)"
+          [class.active]="category === cat"
+          [attr.aria-pressed]="category === cat"
+        >
+          {{ cat }}
+        </button>
+      }
+    </div>
+    <div class="sort">
+      <label for="sort">Ordenar:</label
+      ><select id="sort" [(ngModel)]="order">
+        <option value="selection">Padrão</option>
+        <option value="low">Menor preço</option>
+        <option value="high">Maior preço</option>
+        <option value="name">Nome: A–Z</option>
+      </select>
+    </div>
+  </div>
+  @if (filtered.length) {
+    <div class="product-grid">
+      @for (product of filtered; track product.id) {
+        <r-product [product]="product" />
+      }
+    </div>
+  } @else {
+    <div class="empty-state">
+      <r-icon name="search" />
+      <h2>Nenhum produto por aqui.</h2>
+      <p>Tente buscar por caneta, lápis ou estojo, ou remova os filtros.</p>
+      <a class="btn btn-primary" routerLink="/">Ver todos os produtos</a>
+    </div>
+  }
+</section>

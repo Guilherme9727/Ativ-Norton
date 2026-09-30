@@ -1,0 +1,105 @@
+<section class="container page-section">
+  <div class="section-heading">
+    <div>
+      <span class="eyebrow">Suas próximas ideias</span>
+      <h1>Minha cesta<span class="heading-dot">.</span></h1>
+    </div>
+    <a routerLink="/" class="text-link">Continuar comprando <r-icon name="arrow" /></a>
+  </div>
+  @if (loja.quantidadeTotal()) {
+    <div class="cart-layout">
+      <div>
+        <div class="cart-table-heading">
+          <span>Produto</span><span>Quantidade</span><span>Subtotal</span>
+        </div>
+        @for (line of loja.itens(); track line.id) {
+          <article class="cart-line">
+            <a class="cart-product" [routerLink]="['/produto', line.id]"
+              ><img
+                [src]="'images/produto-' + ('0' + line.id).slice(-2) + '.png'"
+                [alt]="line.product.name"
+                width="90"
+                height="100"
+              />
+              <div>
+                <span class="eyebrow">{{ line.product.brand }}</span>
+                <h2>{{ line.product.name }}</h2>
+                <span>{{ line.product.price / 100 | currency: 'BRL' }} / un.</span>
+              </div></a
+            >
+            <div class="cart-quantity">
+              <div class="quantity-control">
+                <button
+                  (click)="loja.alterarQuantidade(line.id, line.qty - 1)"
+                  [disabled]="line.qty <= 1"
+                  [attr.aria-label]="'Diminuir ' + line.product.name"
+                >
+                  −</button
+                ><input
+                  type="number"
+                  min="1"
+                  max="99"
+                  [value]="line.qty"
+                  (change)="change(line.id, $event)"
+                  [attr.aria-label]="'Quantidade de ' + line.product.name"
+                /><button
+                  (click)="loja.alterarQuantidade(line.id, line.qty + 1)"
+                  [disabled]="line.qty >= 99"
+                  [attr.aria-label]="'Aumentar ' + line.product.name"
+                >
+                  +
+                </button>
+              </div>
+              <button
+                class="remove-link"
+                (click)="loja.remover(line.id)"
+                [attr.aria-label]="'Remover ' + line.product.name"
+              >
+                <r-icon name="trash" /> Remover
+              </button>
+            </div>
+            <strong class="line-total">{{
+              (line.product.price * line.qty) / 100 | currency: 'BRL'
+            }}</strong>
+          </article>
+        }
+        @if (confirmClear) {
+          <div class="clear-confirm" role="alert">
+            <span>Remover todos os produtos?</span
+            ><button class="btn btn-outline-primary" (click)="confirmClear = false">
+              Manter cesta</button
+            ><button class="btn btn-primary" (click)="loja.esvaziar(); confirmClear = false">
+              Sim, esvaziar
+            </button>
+          </div>
+        } @else {
+          <button class="remove-link clear-link" (click)="confirmClear = true">
+            <r-icon name="trash" /> Esvaziar cesta
+          </button>
+        }
+      </div>
+      <aside class="summary-card">
+        <span class="eyebrow">Quase no papel</span>
+        <h2>Resumo da cesta</h2>
+        <div>
+          <span>Produtos ({{ loja.quantidadeTotal() }})</span
+          ><strong>{{ loja.total() / 100 | currency: 'BRL' }}</strong>
+        </div>
+        <div><span>Entrega</span><span>Não se aplica</span></div>
+        <div class="summary-total">
+          <strong>Total</strong><strong>{{ loja.total() / 100 | currency: 'BRL' }}</strong>
+        </div>
+        <a routerLink="/finalizar" class="btn btn-primary"
+          >Finalizar compra <r-icon name="arrow"
+        /></a>
+      </aside>
+    </div>
+  } @else {
+    <div class="empty-state">
+      <div class="empty-icon"><r-icon name="bag" /></div>
+      <h2>Sua cesta está vazia.</h2>
+      <p>Adicione produtos para continuar.</p>
+      <a routerLink="/" class="btn btn-primary">Explorar a papelaria <r-icon name="arrow" /></a>
+    </div>
+  }
+</section>
