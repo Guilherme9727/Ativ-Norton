@@ -1,0 +1,156 @@
+<section class="container page-section">
+  <span class="eyebrow">Só mais um rabisco</span>
+  <h1>Finalizar compra</h1>
+  @if (loja.quantidadeTotal()) {
+    <form [formGroup]="form" (ngSubmit)="finish()" novalidate class="checkout-layout">
+      <div class="checkout-fields">
+        <h2>Seus dados</h2>
+        <div class="field">
+          <label for="checkout-name">Nome completo</label
+          ><input
+            id="checkout-name"
+            class="form-control"
+            formControlName="name"
+            autocomplete="name"
+            [attr.aria-invalid]="invalid('name')"
+            aria-describedby="co-name-error"
+          />
+          @if (invalid('name')) {
+            <small id="co-name-error" class="field-error">Informe nome e sobrenome.</small>
+          }
+        </div>
+        <div class="field">
+          <label for="checkout-email">E-mail</label
+          ><input
+            id="checkout-email"
+            class="form-control"
+            formControlName="email"
+            type="email"
+            autocomplete="email"
+            [attr.aria-invalid]="invalid('email')"
+            aria-describedby="co-email-error"
+          />
+          @if (invalid('email')) {
+            <small id="co-email-error" class="field-error">Informe um e-mail válido.</small>
+          }
+        </div>
+        <h2 class="mt-4">Endereço</h2>
+        <div class="row">
+          <div class="col-sm-5 field">
+            <label for="cep">CEP</label
+            ><input
+              id="cep"
+              class="form-control"
+              formControlName="cep"
+              placeholder="00000-000"
+              autocomplete="postal-code"
+              inputmode="numeric"
+              maxlength="9"
+              [attr.aria-invalid]="invalid('cep')"
+              aria-describedby="cep-error"
+            />
+            @if (invalid('cep')) {
+              <small id="cep-error" class="field-error">O CEP deve conter 8 números.</small>
+            }
+          </div>
+          <div class="col-sm-7 field">
+            <label for="address">Rua ou avenida</label
+            ><input
+              id="address"
+              class="form-control"
+              formControlName="address"
+              autocomplete="address-line1"
+              [attr.aria-invalid]="invalid('address')"
+              aria-describedby="address-error"
+            />
+            @if (invalid('address')) {
+              <small id="address-error" class="field-error"
+                >Informe um endereço com pelo menos 4 caracteres.</small
+              >
+            }
+          </div>
+          <div class="col-sm-3 field">
+            <label for="number">Número</label
+            ><input
+              id="number"
+              class="form-control"
+              formControlName="number"
+              [attr.aria-invalid]="invalid('number')"
+              aria-describedby="number-error"
+            />
+            @if (invalid('number')) {
+              <small id="number-error" class="field-error">Informe um número válido.</small>
+            }
+          </div>
+          <div class="col-sm-6 field">
+            <label for="city">Cidade</label
+            ><input
+              id="city"
+              class="form-control"
+              formControlName="city"
+              autocomplete="address-level2"
+              [attr.aria-invalid]="invalid('city')"
+              aria-describedby="city-error"
+            />
+            @if (invalid('city')) {
+              <small id="city-error" class="field-error">Informe a cidade.</small>
+            }
+          </div>
+          <div class="col-sm-3 field">
+            <label for="state">Estado</label
+            ><select
+              id="state"
+              class="form-select"
+              formControlName="state"
+              autocomplete="address-level1"
+              [attr.aria-invalid]="invalid('state')"
+              aria-describedby="state-error"
+            >
+              <option value="">UF</option>
+              @for (uf of states; track uf) {
+                <option [value]="uf">{{ uf }}</option>
+              }
+            </select>
+            @if (invalid('state')) {
+              <small id="state-error" class="field-error">Selecione a UF.</small>
+            }
+          </div>
+        </div>
+      </div>
+      <aside class="summary-card">
+        <h2>Seu pedido</h2>
+        @for (line of loja.itens(); track line.id) {
+          <div class="checkout-line">
+            <span>{{ line.qty }} × {{ line.product.name }}</span
+            ><strong>{{ (line.qty * line.product.price) / 100 | currency: 'BRL' }}</strong>
+          </div>
+        }
+        <div class="summary-total">
+          <strong>Total</strong><strong>{{ loja.total() / 100 | currency: 'BRL' }}</strong>
+        </div>
+        <label class="check-label"
+          ><input
+            class="form-check-input"
+            type="checkbox"
+            formControlName="accept"
+            [attr.aria-invalid]="invalid('accept')"
+          />
+          Conferi meus dados e os itens do pedido.</label
+        >
+        @if (invalid('accept')) {
+          <small class="field-error">Confirme que conferiu os dados do pedido.</small>
+        }
+        @if (error) {
+          <p class="form-error" role="alert">{{ error }}</p>
+        }
+        <button class="btn btn-primary w-100 mt-3">Concluir pedido <r-icon name="check" /></button
+        ><a routerLink="/cesta" class="back-link">Voltar para a cesta</a>
+      </aside>
+    </form>
+  } @else {
+    <div class="empty-state">
+      <h2>Sua cesta está vazia.</h2>
+      <a routerLink="/" class="btn btn-primary">Escolher produtos</a>
+    </div>
+  }
+</section>

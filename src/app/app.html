@@ -1,0 +1,78 @@
+<a class="skip-link" href="#main" (click)="$event.preventDefault(); focusContent()"
+  >Pular para o conteúdo</a
+>
+<header>
+  <div class="container header-main">
+    <a routerLink="/" class="logo" aria-label="Rabisco, página inicial"
+      >rabisco<span class="logo-dot">.</span><span class="logo-line"></span
+    ></a>
+    <form class="search-box" (ngSubmit)="submit()" role="search">
+      <label for="global-search" class="visually-hidden">Buscar produtos</label
+      ><input
+        id="global-search"
+        name="q"
+        [(ngModel)]="search"
+        placeholder="Buscar produtos..."
+        type="search"
+      /><button aria-label="Buscar"><r-icon name="search" /></button>
+    </form>
+    <div class="header-actions">
+      <a routerLink="/login" class="account-link"
+        ><r-icon name="user" /><span>{{
+          loja.usuario() ? 'Olá, ' + loja.usuario()!.name.split(' ')[0] : 'Entre ou cadastre-se'
+        }}</span></a
+      ><a routerLink="/cesta" class="bag-link" aria-label="Abrir cesta"
+        ><r-icon name="bag" /><span class="cart-count">{{ loja.quantidadeTotal() }}</span></a
+      ><button
+        class="mobile-menu"
+        (click)="menu = !menu"
+        [attr.aria-expanded]="menu"
+        aria-controls="nav-menu"
+        aria-label="Menu de categorias"
+      >
+        <r-icon name="menu" />
+      </button>
+    </div>
+  </div>
+  <nav id="nav-menu" [class.is-open]="menu" aria-label="Categorias">
+    <div class="container nav-content">
+      <a routerLink="/" class="all-products">Todos os produtos</a>
+      @for (cat of loja.categorias; track cat) {
+        <a routerLink="/busca" [queryParams]="{ categoria: cat }">{{ cat }}</a>
+      }
+    </div>
+  </nav>
+</header>
+<main id="main" tabindex="-1"><router-outlet /></main>
+<footer>
+  <div class="container footer-grid">
+    <div>
+      <a routerLink="/" class="logo footer-logo">rabisco<span class="logo-dot">.</span></a>
+      <p>Ideias começam no papel.</p>
+    </div>
+    <div>
+      <h2>Categorias</h2>
+      <div class="footer-links">
+        @for (cat of loja.categorias; track cat) {
+          <a routerLink="/busca" [queryParams]="{ categoria: cat }">{{ cat }}</a>
+        }
+      </div>
+    </div>
+    <div>
+      <h2>Minha conta</h2>
+      <a routerLink="/login">Minha conta</a><a routerLink="/cesta">Minha cesta</a
+      ><a routerLink="/recuperar-senha">Recuperar senha</a>
+    </div>
+  </div>
+  <div class="container footer-bottom">
+    <span>© 2026 Rabisco Papelaria</span><span>Ideias começam no papel.</span>
+  </div>
+</footer>
+@if (loja.aviso()) {
+  <div class="toast-message" role="status">
+    <r-icon name="check" />{{ loja.aviso()
+    }}<button (click)="loja.aviso.set('')" aria-label="Fechar aviso">
+      <r-icon name="close" />
+    </button>
+  </div>
+}
